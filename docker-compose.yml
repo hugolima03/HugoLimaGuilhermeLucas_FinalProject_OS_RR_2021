@@ -9,12 +9,12 @@ services:
     volumes:
       - ./server:/usr/app
     container_name: api_container
+
   react:
+    container_name: react_container
     build: ./client/
     volumes:
       - ./client:/client
     ports:
-      - "3000:3000"
+      - "3000:80"
     image: hugolima/react-client
-    container_name: react_container
-    command: npm start
