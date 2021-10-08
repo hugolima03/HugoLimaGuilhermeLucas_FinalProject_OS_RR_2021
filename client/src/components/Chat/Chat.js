@@ -18,7 +18,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "https://gentle-meadow-86812.herokuapp.com/";
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -37,14 +37,21 @@ const Chat = ({ location }) => {
     };
   }, []);
 
-  useEffect(() => {
-    socket.on("message", (message) => {
-      setMessages([...messages, message]);
-    });
+  function messagesListener(message) {
+    setMessages([...messages, message]);
+  }
 
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
-    });
+  function roomDataListener({ users }) {
+    setUsers(users);
+  }
+
+  useEffect(() => {
+    socket.on("message", messagesListener);
+    socket.on("roomData", roomDataListener);
+    return () => {
+      socket.off("message", messagesListener);
+      socket.off("roomData", roomDataListener);
+    };
   }, [messages]);
 
   // Enviando mensagens

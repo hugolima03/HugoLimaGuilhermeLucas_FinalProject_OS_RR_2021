@@ -1,3 +1,9 @@
+/node_modules
+
+/build
+
 .git
-dist
-node_modules
+
+*.md
+
+.gitignore
